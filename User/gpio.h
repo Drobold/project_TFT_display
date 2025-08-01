@@ -6,7 +6,7 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_spi.h"
 
-#include "All_definitions.h"
+#include "all_definitions.h"
 
 void GPIO_Init_Custom(void);
 

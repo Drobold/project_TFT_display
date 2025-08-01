@@ -390,11 +390,6 @@
               <FilePath>.\User\main.c</FilePath>
             </File>
             <File>
-              <FileName>All_definitions.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\User\All_definitions.h</FilePath>
-            </File>
-            <File>
               <FileName>delay.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\User\delay.c</FilePath>
@@ -443,6 +438,11 @@
               <FileName>st7735s.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\User\st7735s.h</FilePath>
+            </File>
+            <File>
+              <FileName>all_definitions.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\all_definitions.h</FilePath>
             </File>
           </Files>
         </Group>

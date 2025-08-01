@@ -6,7 +6,7 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_spi.h"
 
-#include "All_definitions.h"
+#include "all_definitions.h"
 #include "spi.h"
 #include "gpio.h"
 #include "st7735s.h"
@@ -20,5 +20,6 @@ void range_x(int value1, int value2);
 void rotate_range_x(int value1, int value2);
 void rotate_range_y(int value1, int value2);
 void Screen(uint16_t color, int x, int y);
+void rotate_Screen(uint16_t color, int x, int y);
 #endif
 

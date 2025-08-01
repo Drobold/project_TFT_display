@@ -3,10 +3,11 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_spi.h"
 
+
+/**
+ * @brief Настройка SPI соединения
+ */
 void SPI1_Init(void) {
-	/*
-	Настройка SPI соединения
-	*/
     SPI_InitTypeDef SPI_InitStruct;
 	
 		//Включает тактирование периферийного устройства SPI1

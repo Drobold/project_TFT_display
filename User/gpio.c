@@ -3,12 +3,14 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_spi.h"
 
-#include "All_definitions.h"
+#include "all_definitions.h"
 
+
+/**
+ * @brief Настраивает основные пины дисплея
+ */
 void GPIO_Init_Custom(void) {
-	/*
-	Настраивает основные пины дисплея
-	*/
+
 	
     GPIO_InitTypeDef GPIO_InitStruct;
 	

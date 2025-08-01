@@ -3,11 +3,24 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_spi.h"
 
-#include "All_definitions.h"
+#include "all_definitions.h"
 #include "spi.h"
 #include "gpio.h"
 #include "st7735s.h"
 #include "delay.h"
+
+extern int pixels_vertical;
+extern int pixels_horizontal;
+
+
+
+//Смещения шрифта
+const int between_symbol = 2;
+const int ceiling = 8;
+const int left_end = 3;
+const int between_lines = 5;
+const int symbols_in_string;
+
 
 
 //		int ШАБЛОН[12][9] = {
@@ -26,9 +39,21 @@
 //	};
 
 
-
+	/**
+	 * @brief Отрисовывает ноль
+	 *
+	 * Параметры в группах (x0, x1) и (y0, y1) задают свой пиксель дважды -
+	его начало и конец тем же значением. Функция аналогична для всех цифр
+	 *
+	 * @param font_color - цвет цифры
+	 * @param back_color - цвет фона
+	 * @param *x0 - координата начального пикселя по x 
+	 * @param *x1 - координата конечного пикселя по x
+	 * @param *y0 - координата начального пикселя по y
+	 * @param *x0 - координата конечного пикселя по y 
+	 */
 void ZERO(uint16_t font_color, uint16_t back_color, int *x0, int *x1, int *y0, int *y1) {
-	
+
 	rotate_range_x(*x0, *x1);
 	rotate_range_y(*y0, *y1);
 	
@@ -503,135 +528,125 @@ void TEST_THREE(uint16_t font_color, uint16_t back_color, int *x0, int *x1, int 
 	
 }
 
-//void print(int number) {
-//	
-//	/*
-//	x0, x1, y0, y1 - координаты символа
-//	Смещения:
-//		2 - м/у символами
-//		4 - м/у строчками 
-//	*/
-//	
-//	
-//	
-//	static int x0 = 1+3, x1 = 9+3;
-//	static int y0 = 61, y1 = 72;
-
-//	for (int i = 0; i < 4; i++) {
-//		for (int i = 0; i < 14; i++) {
-//					if (number == 3) {
-//						TEST_THREE(BLUE, BLACK, &x0, &x1, &y0, &y1);
-//						x0 += 9+2, y0 += 0;
-//						x1 += 9+2, y1 += 0;
-//					}
-//				}
-
-//		x0 = 1+3, x1 = 9+3;
-//		y0 = y0-12-5, y1 = y1-12-5;	
-//	}
-//}
 
 
+/**
+ * @brief Функция вывода сообщения на экран
+ *
+ * x0, x1, y0, y1 - координаты символа
+	Смещения в пикселях
+ *  
+ * @param number[] - массив символов
+ */
 
-void display_print(char number[]) {
+void display_print(uint16_t font_collor, char number[]) {
 	
-	/*
-	Функция вывода сообщения на экран
-	x0, x1, y0, y1 - координаты символа
-	Смещения:
-		2 - м/у символами
-		3 - отступы
-		5 - м/у строчками 
-	*/
-	
-	
+	//счетчик символов для перебора
 	int count_symbol = 1;
 	while (number[count_symbol] != '\0') {
 		count_symbol++;
 	}
 	
+	//Счетчик строк
 	int count_line = 0;
 	
-	static int x0 = 1+3, x1 = 9+3;
-	static int y0 = 61, y1 = 72;
+	//Координаты для вывода текущего символа со смещениями
+	static int x0 = 1+between_symbol;
+  static int x1 = 9+between_symbol;
+	
+	static int y0 = 69-ceiling;
+  static int	y1 = 80-ceiling;
+	
 		for (int i = 0; i <= count_symbol; i++) {
 					if (number[i] == '0') {
-						ZERO(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						ZERO(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						//Сдвиг на следующую позицию
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '1') {
-						ONE(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						ONE(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '2') {
-						TWO(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						TWO(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '3') {
-						THREE(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						THREE(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '4') {
-						FOR(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						FOR(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '5') {
-						FIVE(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						FIVE(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '6') {
-						SIX(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						SIX(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '7') {
-						SEVEN(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						SEVEN(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '8') {
-						EIGHT(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						EIGHT(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
 					else if (number[i] == '9') {
-						NINE(BLUE, BLACK, &x0, &x1, &y0, &y1);
-						x0 += 9+2, y0 += 0;
-						x1 += 9+2, y1 += 0;
+						NINE(font_collor, BLACK, &x0, &x1, &y0, &y1);
+						x0 += 9+between_symbol, y0 += 0;
+						x1 += 9+between_symbol, y1 += 0;
 					}
-					if (i % 14 == 0 && i != 0) {
+					
+					//Подсчет числа символов в строке
+					int symbols_in_string = (pixels_vertical - left_end)/(9+between_symbol);
+					
+					int lines_on_display = (pixels_horizontal - ceiling)/(12+between_lines);
+					
+					//Если заполнена вся строка и она не последняя:
+					if (((i+1) % symbols_in_string == 0) && ((count_line) != lines_on_display)) {
 						
 						//Переход на новую строчку
-						x0 = 1+3, x1 = 9+3;
-						y0 = y0-12-5, y1 = y1-12-5;
+						x0 = 1+left_end, x1 = 9+left_end;
+						y0 = y0-12-between_lines, y1 = y1-12-between_lines;
+					
 						
 						//Подсчет заполненных строк
 						count_line++;
 					}
-
-					if (number[i] == number[count_symbol] && count_line != 4-1) {
-						//Переход на новую строчку
-						x0 = 1+3, x1 = 9+3;
-						y0 = y0-12-5, y1 = y1-12-5;
-						
-						count_line++;
-					}
 					
-					//Очистка экрана при заполнеии всех строк
-					if (count_line == 3-1) {
-						count_line = 0;
-						Screen(BLACK, 80, 160);
+					//Если заполнена вся строка и она последняя
+					if (((i+1) % symbols_in_string == 0) && ((count_line) == lines_on_display)) {
 						
-						//Возвращение в исходную позицию
-						x0 = 1+3, x1 = 9+3;
-						y0 = 61, y1 = 72;
+						//Очистка экрана
+						rotate_Screen(BLACK, pixels_vertical, pixels_horizontal);
+						
+						x0 = 1+left_end, x1 = 9+left_end;
+						y0 = 69-ceiling; y1 = 80-ceiling;
+						count_line = 0;
 					}
+//					
+//					//Если ... и это последняя строка
+//					if (number[i] == number[count_symbol] && ((count_line+1) == lines_on_display)) {
+//						
+
+//						
+//						count_line++;
+//					}
+					
+
 
 				}
 		

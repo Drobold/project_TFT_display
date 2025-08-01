@@ -1,3 +1,6 @@
+#ifndef ALL_DEFINITION
+#define ALL_DEFINITION
+
 #define GPIO_Pin_CS GPIO_Pin_2
 #define GPIO_Pin_DC GPIO_Pin_3
 #define GPIO_Pin_RES GPIO_Pin_4
@@ -14,3 +17,5 @@
 #define ORANGE 0xFC00
 #define RED 0xFFE0
 #define GREEN 0xE007
+
+#endif

@@ -13,5 +13,5 @@
   SPL\inc\stm32f10x_rtc.h SPL\inc\stm32f10x_sdio.h \
   SPL\inc\stm32f10x_spi.h SPL\inc\stm32f10x_tim.h \
   SPL\inc\stm32f10x_usart.h SPL\inc\stm32f10x_wwdg.h SPL\inc\misc.h \
-  User\All_definitions.h User\spi.h User\gpio.h User\st7735s.h \
+  User\all_definitions.h User\spi.h User\gpio.h User\st7735s.h \
   User\delay.h
